@@ -20,5 +20,19 @@ namespace EJournal
             Console.WriteLine("Нажмите любую клавишу для продолжения...");
             Console.ReadKey();
         }
+
+        static internal string InputWithEscape()
+        {
+            string line = "";
+            while (true)
+            {
+                ConsoleKeyInfo key = Console.ReadKey(false);
+                if (key.Key == ConsoleKey.Enter)
+                    return line;
+                else if (key.Key == ConsoleKey.Escape)
+                    return null;
+                line += key.KeyChar;
+            }
+        }
     }
 }
