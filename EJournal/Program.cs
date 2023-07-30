@@ -10,9 +10,9 @@ namespace EJournal
     {
         static void Main(string[] args)
         {
-            DataTable dataTable = new DataTable();
-            dataTable = Handler.Create(dataTable);
-            InterfaceClassteacher.PrintAll(dataTable);
+            Handler dataTable = new Handler();
+            dataTable.CreateSample();
+            InterfaceClassteacher.Begin(dataTable.DataClass);
         }
     }
 }

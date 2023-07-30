@@ -23,15 +23,33 @@ namespace EJournal
 
         static internal string InputWithEscape()
         {
-            string line = "";
+            string line = null;
             while (true)
             {
-                ConsoleKeyInfo key = Console.ReadKey(false);
-                if (key.Key == ConsoleKey.Enter)
-                    return line;
-                else if (key.Key == ConsoleKey.Escape)
-                    return null;
-                line += key.KeyChar;
+                ConsoleKeyInfo key = Console.ReadKey(true);
+                switch (key.Key)
+                {
+                    case ConsoleKey.Enter:
+                        return line;
+                    case ConsoleKey.Escape:
+                        return null;
+                    case ConsoleKey.Backspace:
+                        if (line.Length > 0)
+                        {
+                            line = line.Remove(line.Length - 1);
+                            Console.CursorLeft -= 1;
+                            Console.Write(' ');
+                            Console.CursorLeft -= 1;
+                        }
+                        break;
+                    default:
+                        if (Char.IsLetter(key.KeyChar) || Char.IsDigit(key.KeyChar))
+                        {
+                            Console.Write(key.KeyChar);
+                            line += key.KeyChar;
+                        }
+                        break;
+                }
             }
         }
     }

@@ -7,14 +7,14 @@ using System.Threading.Tasks;
 namespace EJournal
 {
     /// <summary>
-    /// Интерфейс для классного учителя
+    /// Интерфейс для классного руководителя
     /// </summary>
     internal static class InterfaceClassteacher
     {
         /// <summary>
         /// Вывод оценок всех учеников по всем предметам
         /// </summary>
-        public static void PrintAll(DataTable dataTable)
+        public static void PrintAll(DataTable DataClass)
         {
             while (true)
             {
@@ -24,104 +24,149 @@ namespace EJournal
                     Console.Clear();
                     Console.WriteLine("Введите номер нужного предмета");
                     Console.WriteLine("для выхода нажмите esc");
-                    for (int i = 1; i < dataTable.Columns.Count; i++)
+                    for (int i = 1; i < DataClass.Columns.Count; i++)
                     {
-                        Console.WriteLine($"{i}. {dataTable.Columns[i]}");
+                        Console.WriteLine($"{i}. {DataClass.Columns[i]}");
                     }
+
                     string line = Tool.InputWithEscape();
                     if (line == null)
                         return;
                     int.TryParse(line, out subjNum);
-                    if ((0 < subjNum) && (subjNum < dataTable.Columns.Count))
+                    if ((0 < subjNum) && (subjNum < DataClass.Columns.Count))
                         break;
                     Tool.Msg("Не верный ввод!");
                 }
 
                 Console.Clear();                                                        //Вывод оценок по предмету
-                foreach (DataRow row in dataTable.Rows)
+                foreach (DataRow row in DataClass.Rows)
                 {
                     Console.Write(row[0] + "\t");
-                    ((List<byte>)row[subjNum]).ForEach((byte x) => Console.Write($"{x} "));
+                    if(row[subjNum].GetType() == typeof(List<byte>))
+                        ((List<byte>)row[subjNum]).ForEach((byte x) => Console.Write($"{x} "));
                 }
 
                 Console.WriteLine("\nДля выхода нажмите любую клавишу");
                 Console.ReadKey();
             }
         }
-        public static void PrintAllS(DataTable dataTable)
+        public static void CreateSubj(DataTable DataClass)
         {
-            foreach (DataColumn column in dataTable.Columns)
-                Console.Write($"{column.ColumnName}\t");
-            Console.WriteLine();
-            // перебор всех строк таблицы
-            foreach (DataRow row in dataTable.Rows)
+            string name;
+            while (true)
             {
-                // получаем все ячейки строки
-                var cells = row.ItemArray;
-                foreach (var cell in cells)
-                {
-                    if (cell.GetType() == typeof(string))
-                        Console.Write($"{cell}\t");
-                    else
-                        ((List<byte>)cell).ForEach((byte x) => Console.Write($"{x} "));
-                }
-                
-                Console.WriteLine();
-            }
-        }
-        public static void Begin()
-        {
-            Console.Clear();
-            Console.WriteLine("Выберите что хотите сделать");
-            Console.WriteLine("1. Добавить ученика");
-            Console.WriteLine("2. Удалить ученика");
-            Console.WriteLine("3. Добавить предмет");
-            Console.WriteLine("4. Удалить предмет");
-            Console.WriteLine("esc Выход из программы");
-            Console.WriteLine("\nДля выбора, нажмите нужную цифру на клавиатуре");
-
-            switch (Console.ReadKey().Key)
-            {
-                case (ConsoleKey.D1):
-                    {
-                        
-                        break;
-                    }
-
-                case (ConsoleKey.D2):
-                    {
-                        
-                        break;
-                    }
-
-                case (ConsoleKey.D3):
-                    {
-                        
-                        break;
-                    }
-
-                case (ConsoleKey.D4):
-                    
-                    break;
-
-                case (ConsoleKey.Escape):
-                    Console.Clear();
+                Console.Clear();
+                Console.WriteLine("Введите название предмета, который хотите добавить");
+                Console.WriteLine("для выхода нажмите esc");
+                name = Tool.InputWithEscape();
+                if (name == null)
                     return;
-
-                default:
-                    Tool.Msg("Нет такой команды");
+                else if (!DataClass.Columns.Contains(name))
                     break;
+                Tool.Msg("Такой предмет уже есть!");
+            }
+            DataClass.Columns.Add(new DataColumn(name, typeof(List<byte>)));
+        }
+
+        public static void DeletSubj(DataTable DataClass)
+        {
+            string name;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите название предмета, который хотите удалить");
+                Console.WriteLine("для выхода нажмите esc");
+                name = Tool.InputWithEscape();
+                if (name == null)
+                    return;
+                else if (DataClass.Columns.Contains(name))
+                    break;
+                Tool.Msg("Такого предмета нет!");
+            }
+            DataClass.Columns.Remove(name);
+        }
+
+        public static void CreateStudent(DataTable DataClass)
+        {
+            string name;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите имя ученика, которого хотите добавить");
+                Console.WriteLine("для выхода нажмите esc");
+                name = Tool.InputWithEscape();
+                if (name == null)
+                    return;
+                else if (!DataClass.Rows.Find(name))
+                    break;
+                Tool.Msg("Такой ученик уже есть!");
+            }
+            DataRow row = DataClass.NewRow();
+            row["Имя"] = name;
+            DataClass.Rows.Add(row);
+        }
+
+        public static void DeletStudent(DataTable DataClass)
+        {
+            string name;
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Введите название предмета, который хотите удалить");
+                Console.WriteLine("для выхода нажмите esc");
+                name = Tool.InputWithEscape();
+                if (name == null)
+                    return;
+                else if (DataClass.Columns.Contains(name))
+                    break;
+                Tool.Msg("Такого предмета нет!");
+            }
+            DataClass.Columns.Remove(name);
+        }
+        public static void Begin(DataTable DataClass)
+        {
+            while (true)
+            {
+                Console.Clear();
+                Console.WriteLine("Выберите что хотите сделать");
+                Console.WriteLine("1. Добавить предмет");
+                Console.WriteLine("2. Удалить предмет");
+                Console.WriteLine("3. Добавить ученика");
+                Console.WriteLine("4. Удалить ученика");
+                Console.WriteLine("5. Посмотреть оценки");
+                Console.WriteLine("esc Выход");
+                Console.WriteLine("\nДля выбора, нажмите нужную цифру на клавиатуре");
+
+                switch (Console.ReadKey().Key)
+                {
+                    case (ConsoleKey.D1):
+                        CreateSubj(DataClass);
+                        break;
+
+                    case (ConsoleKey.D2):
+                        DeletSubj(DataClass);
+                        break;
+
+                    case (ConsoleKey.D3):
+                        CreateStudent(DataClass);
+                        break;
+
+                    case (ConsoleKey.D4):
+                        break;
+
+                    case (ConsoleKey.D5):
+                        PrintAll(DataClass);
+                        break;
+
+                    case (ConsoleKey.Escape):
+                        Console.Clear();
+                        return;
+
+                    default:
+                        Tool.Msg("Нет такой команды");
+                        break;
+                }
             }
         }
-    }
-
-    internal static class InterfaceTeacher
-    {
-
-    }
-
-    internal static class InterfaceStudent
-    {
-
     }
 }
