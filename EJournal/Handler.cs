@@ -17,7 +17,9 @@ namespace EJournal
 
         internal void CreateSample()
         {
-            DataClass.Columns.Add(new DataColumn("Имя", typeof(string)));
+            DataColumn[] Name = new DataColumn[] { new DataColumn("Имя", typeof(string)) };
+            DataClass.Columns.Add(Name[0]);
+            DataClass.PrimaryKey = Name;
             DataClass.Columns.Add(new DataColumn("Русский", typeof(List<byte>)));
             DataClass.Columns.Add(new DataColumn("Математика", typeof(List<byte>)));
             DataClass.Columns.Add(new DataColumn("Физика", typeof(List<byte>)));

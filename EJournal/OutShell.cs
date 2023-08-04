@@ -44,12 +44,17 @@ namespace EJournal
                     Console.Write(row[0] + "\t");
                     if(row[subjNum].GetType() == typeof(List<byte>))
                         ((List<byte>)row[subjNum]).ForEach((byte x) => Console.Write($"{x} "));
+                    Console.WriteLine();
                 }
 
                 Console.WriteLine("\nДля выхода нажмите любую клавишу");
                 Console.ReadKey();
             }
         }
+
+        /// <summary>
+        /// Создание нового предмета
+        /// </summary>
         public static void CreateSubj(DataTable DataClass)
         {
             string name;
@@ -68,6 +73,9 @@ namespace EJournal
             DataClass.Columns.Add(new DataColumn(name, typeof(List<byte>)));
         }
 
+        /// <summary>
+        /// Удаление выбраного предмета
+        /// </summary>
         public static void DeletSubj(DataTable DataClass)
         {
             string name;
@@ -86,6 +94,9 @@ namespace EJournal
             DataClass.Columns.Remove(name);
         }
 
+        /// <summary>
+        /// Добавить нового ученика
+        /// </summary>
         public static void CreateStudent(DataTable DataClass)
         {
             string name;
@@ -97,31 +108,39 @@ namespace EJournal
                 name = Tool.InputWithEscape();
                 if (name == null)
                     return;
-                else if (!DataClass.Rows.Find(name))
+                else if (DataClass.Rows.Find(name) == null)
                     break;
-                Tool.Msg("Такой ученик уже есть!");
+                else
+                    Tool.Msg("Ученик с таким именем уже есть!");
             }
             DataRow row = DataClass.NewRow();
             row["Имя"] = name;
             DataClass.Rows.Add(row);
         }
 
+        /// <summary>
+        /// Удалить нового ученика
+        /// </summary>
         public static void DeletStudent(DataTable DataClass)
         {
             string name;
             while (true)
             {
                 Console.Clear();
-                Console.WriteLine("Введите название предмета, который хотите удалить");
+                Console.WriteLine("Введите имя ученика, которого хотите удалить");
                 Console.WriteLine("для выхода нажмите esc");
                 name = Tool.InputWithEscape();
                 if (name == null)
                     return;
-                else if (DataClass.Columns.Contains(name))
+                var student = DataClass.Rows.Find(name);
+                if (student != null)
+                {
+                    DataClass.Rows.Remove(student);
                     break;
-                Tool.Msg("Такого предмета нет!");
+                }
+                else
+                    Tool.Msg("Ученик с таким именем не существует!");
             }
-            DataClass.Columns.Remove(name);
         }
         public static void Begin(DataTable DataClass)
         {
@@ -152,6 +171,7 @@ namespace EJournal
                         break;
 
                     case (ConsoleKey.D4):
+                        DeletStudent(DataClass);
                         break;
 
                     case (ConsoleKey.D5):

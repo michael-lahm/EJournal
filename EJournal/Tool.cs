@@ -21,16 +21,23 @@ namespace EJournal
             Console.ReadKey();
         }
 
+        /// <summary>
+        /// Позволяяет ввести только буквы и цифры, 
+        /// возвращает null если нажали esc
+        /// </summary>
+        /// <returns></returns>
         static internal string InputWithEscape()
         {
-            string line = null;
+            string line = "";
             while (true)
             {
                 ConsoleKeyInfo key = Console.ReadKey(true);
                 switch (key.Key)
                 {
                     case ConsoleKey.Enter:
-                        return line;
+                        if(line != "")
+                            return line;
+                        break;
                     case ConsoleKey.Escape:
                         return null;
                     case ConsoleKey.Backspace:
