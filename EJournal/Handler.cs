@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data;
@@ -15,23 +14,47 @@ namespace EJournal
             DataClass = new DataTable();
         }
 
+        /// <summary>
+        /// Создание класса со случайными учениками, предметами и оценками
+        /// </summary>
         internal void CreateSample()
         {
+            var rand = new Random();
+
+            var firstname = new string[] { "Вася", "Петя", "Андрей", "Миша", "Максим", "Ваня", "Костя", "Матвей", "Саша", "Кеша" };
+            var subject = new string[] { "Русский", "Математика", "Информатика", "Физика", "Химия", "Биология", "Литература", "История", "Обществознание", "Иностранный" };
+            
             DataColumn[] Name = new DataColumn[] { new DataColumn("Имя", typeof(string)) };
             DataClass.Columns.Add(Name[0]);
             DataClass.PrimaryKey = Name;
-            DataClass.Columns.Add(new DataColumn("Русский", typeof(List<byte>)));
-            DataClass.Columns.Add(new DataColumn("Математика", typeof(List<byte>)));
-            DataClass.Columns.Add(new DataColumn("Физика", typeof(List<byte>)));
-            DataClass.Columns.Add(new DataColumn("Информатика", typeof(List<byte>)));
+
+            for (int i = 0; i < subject.Length; i++)
+            {
+                if(rand.Next(0, 10) > DataClass.Columns.Count)
+                    DataClass.Columns.Add(subject[i], typeof(List<byte>));
+            }
+
+            for (int i = 0; i < firstname.Length; i++)
+            {
+                if (rand.Next(0, 10) > DataClass.Rows.Count)
+                {
+                    DataRow student = DataClass.NewRow();
+                    student["Имя"] = firstname[i];
+
+                    for (int a = 1; a < DataClass.Columns.Count; a++)
+                    {
+                        var estimates = new List<byte>() {};
+                        int quantity = rand.Next(3, 10);
+                        for (int estimat = 0; estimat < quantity; estimat++)
+                            estimates.Add((byte)rand.Next(2, 6));
+                        student[DataClass.Columns[a].ColumnName] = estimates;
+                    }
+
+                    DataClass.Rows.Add(student);
+                }
+            }
+
             
-            DataRow row = DataClass.NewRow();
-            row["Имя"] = "Вася";
-            row["Русский"] = new List<byte> { 5, 2, 4 };
-            row["Математика"] = new List<byte> { 4, 2, 5, 5 };
-            row["Физика"] = new List<byte> { 5, 5, 5 };
-            row["Информатика"] = new List<byte> { 2, 2 };
-            DataClass.Rows.Add(row);
         }
     }
 }
