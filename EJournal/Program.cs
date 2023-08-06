@@ -6,15 +6,22 @@ using System.Data;
 
 namespace EJournal
 {
-    internal class Program
+    internal static class Program
     {
+        
         static void Main(string[] args)
         {
-            DataSet ds = new DataSet();
-            Handler dataTable = new Handler();
-            dataTable.CreateSample();
-            var classteacher = new InterfaceClassteacher(dataTable.DataClass);
-            classteacher.Begin();
+            DataSet CSchool = new DataSet();
+
+            var CClass = new Class(CSchool, "11А");
+            CClass.CreateSample();
+            CClass = new Class(CSchool, "11Б");
+            CClass.CreateSample();
+            CClass = new Class(CSchool, "11В");
+            CClass.CreateSample();
+
+            var menu = new StartMenu(CSchool);
+            menu.Begin();
         }
     }
 }

@@ -22,10 +22,9 @@ namespace EJournal
         }
 
         /// <summary>
-        /// Позволяяет ввести только буквы и цифры, 
-        /// возвращает null если нажали esc
+        /// Позволяяет ввести только буквы и цифры
         /// </summary>
-        /// <returns></returns>
+        /// <returns>возвращает null если нажали esc, иначе набраный текст</returns>
         static internal string InputWithEscape()
         {
             string line = "";

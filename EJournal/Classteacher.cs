@@ -19,7 +19,7 @@ namespace EJournal
         /// <summary>
         /// Вывод оценок всех учеников по всем предметам
         /// </summary>
-        public void PrintAll()
+        private void PrintAll()
         {
             while (true)
             {
@@ -59,7 +59,7 @@ namespace EJournal
         /// <summary>
         /// Создание нового предмета
         /// </summary>
-        public void CreateSubj()
+        private void CreateSubj()
         {
             string name;
             while (true)
@@ -80,7 +80,7 @@ namespace EJournal
         /// <summary>
         /// Удаление выбраного предмета
         /// </summary>
-        public void DeletSubj()
+        private void DeletSubj()
         {
             string name;
             while (true)
@@ -101,7 +101,7 @@ namespace EJournal
         /// <summary>
         /// Добавить нового ученика
         /// </summary>
-        public void CreateStudent()
+        private void CreateStudent()
         {
             string name;
             while (true)
@@ -125,7 +125,7 @@ namespace EJournal
         /// <summary>
         /// Удалить нового ученика
         /// </summary>
-        public void DeletStudent()
+        private void DeletStudent()
         {
             string name;
             while (true)
