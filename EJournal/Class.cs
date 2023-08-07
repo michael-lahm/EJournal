@@ -7,10 +7,10 @@ namespace EJournal
     internal class Class
     {
         public DataTable DataClass { get;}
-        internal Class(DataSet School, string Name)
+        internal Class(DataSet DataSchool, string Name)
         {
             DataClass = new DataTable(Name);
-            School.Tables.Add(DataClass);
+            DataSchool.Tables.Add(DataClass);
         }
 
         /// <summary>

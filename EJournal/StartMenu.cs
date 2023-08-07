@@ -8,14 +8,15 @@ namespace EJournal
     {
         private DataSet DataSchool;
 
-        public StartMenu(DataSet School)
+        public StartMenu(DataSet DataSchool)
         {
-            this.DataSchool = School;
+            this.DataSchool = DataSchool;
         }
 
         private void Director()
         {
-
+            var Director = new InterfaceDirector(DataSchool);  //Вход
+            Director.Begin();
         }
 
         /// <summary>
@@ -48,6 +49,9 @@ namespace EJournal
             Cteacher.Begin();
         }
 
+        /// <summary>
+        /// Вход для учителя
+        /// </summary>
         private void Teacher()
         {
             var listSubj = new List<String>();                                     //Создание списка всех предметов
@@ -85,11 +89,60 @@ namespace EJournal
             teacher.Begin();
         }
 
+        /// <summary>
+        /// Вход для ученика
+        /// </summary>
         private void Student()
         {
+            int classNum;
+            while (true)                                                        //Ожидаем выбор нужного класса
+            {
+                Console.Clear();
+                Console.WriteLine("Введите номер нужного класса");
+                Console.WriteLine("для выхода нажмите esc");
+                for (int i = 0; i < DataSchool.Tables.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {DataSchool.Tables[i].TableName}");
+                }
 
+                string line = Tool.InputWithEscape();
+                if (line == null)
+                    return;
+                int.TryParse(line, out classNum);
+                classNum--;
+                if ((0 <= classNum) && (classNum < DataSchool.Tables.Count))
+                    break;
+                Tool.Msg("Не верный ввод!");
+            }
+
+            int studNum;
+            while (true)                                                        //Ожидаем выбор нужного ученика
+            {
+                Console.Clear();
+                Console.WriteLine("Введите номер нужного студента");
+                Console.WriteLine("для выхода нажмите esc");
+                for (int i = 0; i < DataSchool.Tables[classNum].Rows.Count; i++)
+                {
+                    Console.WriteLine($"{i + 1}. {DataSchool.Tables[classNum].Rows[i][0]}");
+                }
+
+                string line = Tool.InputWithEscape();
+                if (line == null)
+                    return;
+                int.TryParse(line, out studNum);
+                studNum--;
+                if ((0 <= studNum) && (studNum < DataSchool.Tables[classNum].Rows.Count))
+                    break;
+                Tool.Msg("Не верный ввод!");
+            }
+
+            var Student = new InterfaceStudent(DataSchool.Tables[classNum].Rows[studNum]);  //Вход
+            Student.Print();
         }
 
+        /// <summary>
+        /// Стартовое меню
+        /// </summary>
         public void Begin()
         {
             while (true)
@@ -123,7 +176,13 @@ namespace EJournal
 
                     case (ConsoleKey.Escape):
                         Console.Clear();
-                        return;
+                        Console.WriteLine("Для подтверждения выхода из программы нажмите enter");
+                        if (Console.ReadKey().Key == ConsoleKey.Enter)
+                        {
+                            Console.Clear();
+                            return;
+                        }
+                        break;
 
                     default:
                         Tool.Msg("Нет такой команды");

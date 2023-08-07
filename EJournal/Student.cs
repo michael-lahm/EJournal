@@ -13,6 +13,9 @@ namespace EJournal
             this.Data = Data;
         }
 
+        /// <summary>
+        /// Выводит всю информацию об ученике
+        /// </summary>
         public void Print()
         {
             Console.Clear();
@@ -24,7 +27,8 @@ namespace EJournal
                 ((List<byte>)Data[i]).ForEach((byte x) => Console.Write($"{x} "));
                 Console.WriteLine();
             }
-            Console.WriteLine();
+            Console.WriteLine("\nДля выхода нажмите любую клавишу");
+            Console.ReadKey();
         }
     }
 }
