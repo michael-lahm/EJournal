@@ -1,6 +1,6 @@
 # EJournal
-Electronic journal working in the windows console   
-Imitation of the basic functions of an electronic diary   
+Working in windows console   
+Imitation of the basic functions of an electronic journal   
    
 Implemented function:   
 1) Intarface Director   
